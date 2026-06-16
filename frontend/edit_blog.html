@@ -1,43 +1,649 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Blog</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Post — BlogSpace</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f4fb;
+      color: #1a1a2e;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+      background: #fff;
+      border-bottom: 1px solid #e8e6f9;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: #534AB7;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 20px; }
+    .nav-links a {
+      font-size: 14px;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #534AB7; }
+    .btn-nav {
+      font-size: 13px;
+      padding: 8px 20px;
+      background: #534AB7;
+      color: #fff !important;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-nav:hover { background: #3C3489 !important; transform: translateY(-1px); }
+
+    /* ── PAGE LAYOUT ── */
+    .form-page {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 24px 64px;
+    }
+    .form-wrap {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #888;
+    }
+    .breadcrumb a { color: #534AB7; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    /* ── WARNING BANNER ── */
+    .warning-banner {
+      background: #FFF8E8;
+      border: 1.5px solid #FAC775;
+      border-radius: 14px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13px;
+      color: #854F0B;
+      line-height: 1.6;
+    }
+    .warning-banner i { font-size: 18px; margin-top: 1px; flex-shrink: 0; color: #BA7517; }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      background: #fff;
+      border-radius: 20px;
+      border: 1.5px solid #e8e6f9;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(83,74,183,0.07);
+    }
+
+    .form-card-top {
+      background: linear-gradient(135deg, #3C3489 0%, #534AB7 50%, #1D9E75 100%);
+      padding: 36px 36px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .form-card-top::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 180px; height: 180px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .form-card-top::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; left: 60px;
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .form-card-top .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+      letter-spacing: 0.04em;
+    }
+    .form-card-top h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.25;
+      position: relative;
+    }
+    .form-card-top p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.6;
+      position: relative;
+    }
+
+    /* ── POST META STRIP ── */
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 36px;
+      background: #EEEDFE;
+      border-bottom: 1px solid #d8d5f5;
+      font-size: 13px;
+      color: #534AB7;
+      flex-wrap: wrap;
+    }
+    .post-meta i { font-size: 15px; }
+    .post-meta .sep { color: #AFA9EC; }
+
+    /* ── FORM BODY ── */
+    .form-card-body { padding: 36px; }
+    .form-group { margin-bottom: 26px; }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    label i { font-size: 15px; color: #534AB7; }
+
+    .input-wrap { position: relative; }
+    input[type="text"] {
+      width: 100%;
+      padding: 13px 16px 13px 44px;
+      border-radius: 12px;
+      border: 1.5px solid #e0ddf7;
+      background: #fafafa;
+      font-size: 15px;
+      color: #1a1a2e;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    input[type="text"]:focus {
+      border-color: #534AB7;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(83,74,183,0.1);
+    }
+    input[type="text"]::placeholder { color: #bbb; }
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #AFA9EC;
+      pointer-events: none;
+    }
+
+    /* ── CHANGE INDICATOR ── */
+    .changed-badge {
+      display: none;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #BA7517;
+      background: #FFF8E8;
+      border: 1px solid #FAC775;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-left: 10px;
+    }
+    .changed-badge.visible { display: inline-flex; }
+
+    /* ── TEXTAREA ── */
+    .textarea-wrap { position: relative; }
+    textarea {
+      width: 100%;
+      min-height: 260px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1.5px solid #e0ddf7;
+      background: #fafafa;
+      font-size: 15px;
+      color: #1a1a2e;
+      line-height: 1.7;
+      resize: vertical;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    textarea:focus {
+      border-color: #534AB7;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(83,74,183,0.1);
+    }
+    textarea::placeholder { color: #bbb; }
+    .textarea-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #aaa;
+    }
+    .char-count span { color: #534AB7; font-weight: 600; }
+
+    /* ── DIFF TOGGLE ── */
+    .diff-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .diff-toggle {
+      font-size: 12px;
+      color: #534AB7;
+      background: none;
+      border: 1px solid #AFA9EC;
+      border-radius: 999px;
+      padding: 4px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.15s;
+    }
+    .diff-toggle:hover { background: #EEEDFE; }
+
+    /* ── ACTIONS ── */
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 20px;
+      border-top: 1px solid #f0eef9;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .actions-right { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 11px 24px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-outline {
+      background: #fff;
+      color: #666;
+      border: 1.5px solid #e0ddf7;
+    }
+    .btn-outline:hover { border-color: #534AB7; color: #534AB7; }
+    .btn-danger-soft {
+      background: #FAECE7;
+      color: #993C1D;
+      border: 1.5px solid #F5C4B3;
+    }
+    .btn-danger-soft:hover { background: #F5C4B3; }
+    .btn-primary {
+      background: #534AB7;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #3C3489; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(83,74,183,0.25); }
+    .btn-primary:disabled {
+      background: #AFA9EC;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .btn-lg { font-size: 15px; padding: 13px 30px; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 14px;
+      color: #888;
+      border-top: 1px solid #e8e6f9;
+      background: #fff;
+    }
+    footer span { color: #534AB7; font-weight: 600; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #534AB7;
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── UNSAVED CHANGES BAR ── */
+    .unsaved-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #1a1a2e;
+      color: #fff;
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      transform: translateY(100%);
+      transition: transform 0.3s;
+      z-index: 200;
+    }
+    .unsaved-bar.show { transform: translateY(0); }
+    .unsaved-bar .bar-left { display: flex; align-items: center; gap: 10px; }
+    .unsaved-dot { width: 8px; height: 8px; background: #FAC775; border-radius: 50%; }
+    .bar-btn {
+      font-size: 13px;
+      padding: 8px 20px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .bar-btn-discard { background: rgba(255,255,255,0.1); color: #fff; margin-right: 8px; }
+    .bar-btn-discard:hover { background: rgba(255,255,255,0.2); }
+    .bar-btn-save { background: #534AB7; color: #fff; }
+    .bar-btn-save:hover { background: #3C3489; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .form-card-top { padding: 28px 22px 24px; }
+      .form-card-body { padding: 24px 20px; }
+      .post-meta { padding: 12px 20px; }
+      .form-actions { flex-direction: column; }
+      .actions-right { width: 100%; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Edit Blog</h1>
-
-    <form action="/edit/{{ blog.id }}" method="POST">
-
-        <input
-            type="text"
-            name="title"
-            value="{{ blog.title }}"
-            required>
-
-        <input
-            type="text"
-            name="author"
-            value="{{ blog.author }}"
-            required>
-
-        <textarea
-            name="content"
-            required>{{ blog.content }}</textarea>
-
-        <button type="submit">
-            Update Blog
-        </button>
-
-    </form>
-
-    <br>
-
-    <a href="/">
-        Back Home
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="/">
+      <i class="ti ti-sparkles"></i> BlogSpace
     </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/create" class="btn-nav">
+        <i class="ti ti-pencil"></i> Write a post
+      </a>
+    </div>
+  </nav>
+
+  <!-- PAGE -->
+  <div class="form-page">
+    <div class="form-wrap">
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a href="/"><i class="ti ti-home"></i> Home</a>
+        <i class="ti ti-chevron-right"></i>
+        <a href="/blog/{{ blog.id }}">Post #{{ blog.id }}</a>
+        <i class="ti ti-chevron-right"></i>
+        <span>Edit</span>
+      </div>
+
+      <!-- Warning banner -->
+      <div class="warning-banner">
+        <i class="ti ti-alert-triangle"></i>
+        <span>
+          <strong>Heads up:</strong> You're editing a published post.
+          Changes will go live as soon as you save.
+        </span>
+      </div>
+
+      <!-- Form card -->
+      <div class="form-card">
+
+        <div class="form-card-top">
+          <div class="tag">
+            <i class="ti ti-edit"></i> Editing post
+          </div>
+          <h1>Edit Post</h1>
+          <p>Update your post and republish it to the world.</p>
+        </div>
+
+        <!-- Post meta strip -->
+        <div class="post-meta">
+          <i class="ti ti-file-text"></i>
+          <span>Post #{{ blog.id }}</span>
+          <span class="sep">·</span>
+          <i class="ti ti-clock"></i>
+          <span>Last edited just now</span>
+          <span class="sep">·</span>
+          <i class="ti ti-world"></i>
+          <span>Published</span>
+        </div>
+
+        <div class="form-card-body">
+          <form action="/blog/{{ blog.id }}/edit" method="post" id="edit-form">
+
+            <!-- Title -->
+            <div class="form-group">
+              <label for="title">
+                <i class="ti ti-bookmark"></i> Post title
+                <span class="changed-badge" id="title-badge">
+                  <i class="ti ti-pencil"></i> Edited
+                </span>
+              </label>
+              <div class="input-wrap">
+                <i class="ti ti-letter-case input-icon"></i>
+                <input
+                  id="title"
+                  name="title"
+                  type="text"
+                  value="{{ blog.title }}"
+                  required
+                  autocomplete="off"
+                  maxlength="120"
+                />
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="form-group">
+              <label for="body">
+                <i class="ti ti-align-left"></i> Your story
+                <span class="changed-badge" id="body-badge">
+                  <i class="ti ti-pencil"></i> Edited
+                </span>
+              </label>
+              <div class="textarea-wrap">
+                <textarea
+                  id="body"
+                  name="body"
+                  required
+                >{{ blog.body }}</textarea>
+              </div>
+              <div class="textarea-footer">
+                <button type="button" class="diff-toggle" id="diff-btn" onclick="toggleDiff()" style="display:none">
+                  <i class="ti ti-git-diff"></i> Show original
+                </button>
+                <div class="char-count">
+                  <span id="char-num">0</span> characters
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="form-actions">
+              <a href="/blog/{{ blog.id }}/delete" class="btn btn-danger-soft">
+                <i class="ti ti-trash"></i> Delete post
+              </a>
+              <div class="actions-right">
+                <a href="/blog/{{ blog.id }}" class="btn btn-outline">
+                  <i class="ti ti-x"></i> Discard changes
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg" id="save-btn">
+                  <i class="ti ti-device-floppy"></i> Save changes
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    Built with <i class="ti ti-heart" style="color:#D85A30"></i> using <span>FastAPI</span> · © 2024 BlogSpace
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <i class="ti ti-check"></i>
+    <span id="toast-msg"></span>
+  </div>
+
+  <!-- UNSAVED CHANGES BAR -->
+  <div class="unsaved-bar" id="unsaved-bar">
+    <div class="bar-left">
+      <div class="unsaved-dot"></div>
+      <span>You have unsaved changes</span>
+    </div>
+    <div>
+      <button class="bar-btn bar-btn-discard" onclick="discardChanges()">Discard</button>
+      <button class="bar-btn bar-btn-save" onclick="document.getElementById('edit-form').submit()">
+        Save now
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const titleEl = document.getElementById('title');
+    const bodyEl  = document.getElementById('body');
+
+    const origTitle = titleEl.value;
+    const origBody  = bodyEl.value;
+
+    // Init char count
+    document.getElementById('char-num').textContent = bodyEl.value.length.toLocaleString();
+
+    function checkChanges() {
+      const titleChanged = titleEl.value !== origTitle;
+      const bodyChanged  = bodyEl.value  !== origBody;
+
+      document.getElementById('title-badge').classList.toggle('visible', titleChanged);
+      document.getElementById('body-badge').classList.toggle('visible', bodyChanged);
+      document.getElementById('diff-btn').style.display = bodyChanged ? 'inline-flex' : 'none';
+
+      const anyChanged = titleChanged || bodyChanged;
+      document.getElementById('unsaved-bar').classList.toggle('show', anyChanged);
+    }
+
+    titleEl.addEventListener('input', checkChanges);
+    bodyEl.addEventListener('input', () => {
+      document.getElementById('char-num').textContent = bodyEl.value.length.toLocaleString();
+      checkChanges();
+    });
+
+    let showingOriginal = false;
+    function toggleDiff() {
+      const btn = document.getElementById('diff-btn');
+      if (showingOriginal) {
+        bodyEl.value = bodyEl.dataset.edited || bodyEl.value;
+        btn.innerHTML = '<i class="ti ti-git-diff"></i> Show original';
+        showingOriginal = false;
+      } else {
+        bodyEl.dataset.edited = bodyEl.value;
+        bodyEl.value = origBody;
+        btn.innerHTML = '<i class="ti ti-git-diff"></i> Back to edit';
+        showingOriginal = true;
+      }
+    }
+
+    function discardChanges() {
+      titleEl.value = origTitle;
+      bodyEl.value  = origBody;
+      document.getElementById('char-num').textContent = origBody.length.toLocaleString();
+      checkChanges();
+      showToast('Changes discarded');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    document.getElementById('edit-form').addEventListener('submit', () => {
+      showToast('Saving changes…');
+    });
+
+    // Warn before leaving with unsaved changes
+    window.addEventListener('beforeunload', e => {
+      if (titleEl.value !== origTitle || bodyEl.value !== origBody) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+  </script>
 
 </body>
 </html>

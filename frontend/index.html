@@ -1,59 +1,520 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Dashboard</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BlogSpace — Discover Stories</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f4fb;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+      background: #fff;
+      border-bottom: 1px solid #e8e6f9;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: #534AB7;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 20px; }
+    .nav-links a {
+      font-size: 14px;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #534AB7; }
+    .btn-nav {
+      font-size: 13px;
+      padding: 8px 20px;
+      background: #534AB7;
+      color: #fff !important;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-nav:hover { background: #3C3489 !important; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #534AB7 0%, #3C3489 55%, #1D9E75 100%);
+      padding: 72px 32px 60px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 13px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(4px);
+    }
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.8);
+      max-width: 420px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-white {
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 26px;
+      background: #fff;
+      color: #534AB7;
+      border-radius: 999px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+    .btn-outline-white {
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 26px;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border-radius: 999px;
+      text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-outline-white:hover { background: rgba(255,255,255,0.22); }
+
+    /* ── STATS ── */
+    .stats-bar {
+      background: #fff;
+      border-bottom: 1px solid #e8e6f9;
+    }
+    .stats-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+    }
+    .stat {
+      padding: 20px 48px;
+      text-align: center;
+      border-right: 1px solid #e8e6f9;
+    }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-size: 26px;
+      font-weight: 700;
+      color: #534AB7;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: #888;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    /* ── SEARCH & FILTER ── */
+    .search-wrap {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .search-wrap input {
+      flex: 1;
+      padding: 11px 18px;
+      border-radius: 999px;
+      border: 1.5px solid #e0ddf7;
+      background: #fff;
+      font-size: 14px;
+      color: #1a1a2e;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-wrap input:focus { border-color: #534AB7; }
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .filter-btn {
+      font-size: 13px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1.5px solid #e0ddf7;
+      background: #fff;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: #534AB7; color: #534AB7; }
+    .filter-btn.active {
+      background: #534AB7;
+      color: #fff;
+      border-color: #534AB7;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .section-title span { color: #534AB7; }
+    .btn-primary {
+      font-size: 13px;
+      padding: 9px 20px;
+      background: #534AB7;
+      color: #fff;
+      border-radius: 999px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-primary:hover { background: #3C3489; transform: translateY(-1px); }
+
+    /* ── BLOG GRID ── */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1.5px solid #e8e6f9;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(83,74,183,0.12);
+      border-color: #AFA9EC;
+    }
+    .card-banner { height: 7px; }
+    .card-banner.purple { background: #534AB7; }
+    .card-banner.teal   { background: #1D9E75; }
+    .card-banner.coral  { background: #D85A30; }
+    .card-banner.pink   { background: #D4537E; }
+    .card-banner.amber  { background: #BA7517; }
+
+    .card-body { padding: 18px 20px 20px; }
+    .card-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #534AB7;
+      background: #EEEDFE;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.03em;
+      margin-bottom: 12px;
+    }
+    .card-body h2 {
+      font-size: 17px;
+      font-weight: 600;
+      color: #1a1a2e;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .card-body p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.65;
+      margin-bottom: 18px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-footer {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 7px 16px; border-radius: 999px; text-decoration: none; transition: opacity 0.15s, transform 0.1s; }
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn.btn-primary { background: #534AB7; color: #fff; }
+    .btn.btn-teal    { background: #E1F5EE; color: #0F6E56; }
+    .btn.btn-danger  { background: #FAECE7; color: #993C1D; }
+
+    /* ── EMPTY ── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .empty-icon { font-size: 56px; margin-bottom: 20px; }
+    .empty-state h2 { font-size: 22px; font-weight: 600; margin-bottom: 10px; }
+    .empty-state p { font-size: 15px; color: #888; margin-bottom: 24px; }
+    .btn-lg { font-size: 15px; padding: 13px 28px; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #534AB7;
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 28px;
+      font-size: 14px;
+      color: #888;
+      border-top: 1px solid #e8e6f9;
+      background: #fff;
+    }
+    footer span { color: #534AB7; font-weight: 600; }
+
+    /* ── NO JS FALLBACK (Jinja) ── */
+    .jinja-grid { display: contents; }
+  </style>
 </head>
 <body>
 
-    <h1>Blog Dashboard</h1>
-
-    <a href="/create">
-        Create Blog
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="/">
+      <i class="ti ti-sparkles"></i> BlogSpace
     </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/create" class="btn-nav">
+        <i class="ti ti-pencil"></i> Write a post
+      </a>
+    </div>
+  </nav>
 
-    <br><br>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <i class="ti ti-star"></i> Welcome to BlogSpace
+    </div>
+    <h1>Stories Worth Reading, Ideas Worth Sharing</h1>
+    <p>A space for curious minds to write, explore, and connect through words.</p>
+    <div class="hero-actions">
+      <a href="/create" class="btn-white">
+        <i class="ti ti-pencil"></i> Write a post
+      </a>
+      <a href="#posts" class="btn-outline-white">
+        Browse stories <i class="ti ti-arrow-down"></i>
+      </a>
+    </div>
+  </section>
 
-    <input type="text" placeholder="Search Blogs">
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat">
+        <div class="stat-num">100+</div>
+        <div class="stat-label">Stories</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Writers</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Ideas</div>
+      </div>
+    </div>
+  </div>
 
-    <hr>
+  <!-- POSTS -->
+  <main class="container" id="posts">
 
-    {% for blog in blogs %}
-
-    <div class="card">
-
-        <h2>{{ blog.title }}</h2>
-
-        <p>
-            Author: {{ blog.author }}
-        </p>
-
-        <p>
-            {{ blog.content[:100] }}...
-        </p>
-
-        <a href="/blog/{{ blog.id }}">
-            View
-        </a>
-
-        &nbsp;
-
-        <a href="/edit/{{ blog.id }}">
-            Edit
-        </a>
-
-        &nbsp;
-
-        <a href="/delete/{{ blog.id }}">
-            Delete
-        </a>
-
+    <!-- Search -->
+    <div class="search-wrap">
+      <input type="text" id="search-input" placeholder="Search stories by title or content…" oninput="filterCards()"/>
     </div>
 
-    <hr>
+    <!-- Filters -->
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="setFilter(this, 'all')">All posts</button>
+      <button class="filter-btn" onclick="setFilter(this, 'technology')">Technology</button>
+      <button class="filter-btn" onclick="setFilter(this, 'lifestyle')">Lifestyle</button>
+      <button class="filter-btn" onclick="setFilter(this, 'design')">Design</button>
+      <button class="filter-btn" onclick="setFilter(this, 'travel')">Travel</button>
+    </div>
 
-    {% endfor %}
+    <div class="section-header">
+      <h2 class="section-title">Latest <span>Posts</span></h2>
+      <a href="/create" class="btn btn-primary btn-lg">
+        <i class="ti ti-plus"></i> New post
+      </a>
+    </div>
+
+    <div class="blog-grid" id="blog-grid">
+
+      <!-- ─── Jinja2 loop — each card gets a data-tag for JS filtering ─── -->
+      {% for blog in blogs %}
+      {% set colors = ['purple','teal','coral','pink','amber'] %}
+      {% set color = colors[loop.index0 % colors|length] %}
+      <article class="card" data-title="{{ blog.title | lower }}" data-body="{{ blog.body | lower }}" data-tag="all">
+        <div class="card-banner {{ color }}"></div>
+        <div class="card-body">
+          <span class="card-tag"><i class="ti ti-sparkles"></i> Post #{{ blog.id }}</span>
+          <h2>{{ blog.title }}</h2>
+          <p>{{ blog.body }}</p>
+          <div class="card-footer">
+            <a href="/blog/{{ blog.id }}"        class="btn btn-primary"><i class="ti ti-arrow-right"></i> Read</a>
+            <a href="/blog/{{ blog.id }}/edit"   class="btn btn-teal"><i class="ti ti-edit"></i> Edit</a>
+            <a href="/blog/{{ blog.id }}/delete" class="btn btn-danger"><i class="ti ti-trash"></i> Delete</a>
+          </div>
+        </div>
+      </article>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">✍️</div>
+        <h2>No posts yet!</h2>
+        <p>Be the first one to share your story with the world.</p>
+        <a href="/create" class="btn btn-primary btn-lg">Write the first post</a>
+      </div>
+      {% endfor %}
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    Built with <i class="ti ti-heart" style="color:#D85A30"></i> using <span>FastAPI</span> · © 2024 BlogSpace
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <i class="ti ti-check"></i>
+    <span id="toast-msg"></span>
+  </div>
+
+  <script>
+    let activeFilter = 'all';
+
+    function filterCards() {
+      const q = document.getElementById('search-input').value.toLowerCase();
+      document.querySelectorAll('.blog-grid .card').forEach(card => {
+        const title = card.dataset.title || '';
+        const body  = card.dataset.body  || '';
+        const tag   = card.dataset.tag   || 'all';
+        const matchQ = title.includes(q) || body.includes(q);
+        const matchF = activeFilter === 'all' || tag === activeFilter;
+        card.style.display = (matchQ && matchF) ? '' : 'none';
+      });
+    }
+
+    function setFilter(btn, filter) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = filter;
+      filterCards();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Animate stat counters on load
+    function countUp(el, target, suffix) {
+      let v = 0;
+      const step = Math.ceil(target / 50);
+      const iv = setInterval(() => {
+        v = Math.min(v + step, target);
+        el.textContent = v + suffix;
+        if (v >= target) clearInterval(iv);
+      }, 25);
+    }
+    document.querySelectorAll('.stat-num').forEach((el, i) => {
+      const original = el.textContent.trim();
+      if (i === 0) countUp(el, 100, '+');
+      else if (i === 1) countUp(el, 50, '+');
+    });
+
+    // Smooth scroll for "Browse stories" link
+    document.querySelector('a[href="#posts"]')?.addEventListener('click', e => {
+      e.preventDefault();
+      document.getElementById('posts').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
 
 </body>
 </html>

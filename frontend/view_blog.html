@@ -1,73 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ blog.title }}</title>
-
-    <style>
-        body{
-            font-family:Segoe UI, sans-serif;
-            background:#f4f7fc;
-            margin:0;
-            padding:40px;
-        }
-
-        .container{
-            max-width:800px;
-            margin:auto;
-            background:white;
-            padding:30px;
-            border-radius:15px;
-            box-shadow:0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        h1{
-            color:#1e293b;
-        }
-
-        .author{
-            color:#3b82f6;
-            margin-bottom:20px;
-        }
-
-        .content{
-            line-height:1.8;
-            color:#444;
-        }
-
-        .btn{
-            display:inline-block;
-            margin-top:20px;
-            padding:10px 20px;
-            background:#3b82f6;
-            color:white;
-            text-decoration:none;
-            border-radius:8px;
-        }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ blog.title }} — BlogSpace</title>
+  <link rel="stylesheet" href="/frontend/style.css"/>
 </head>
 <body>
 
-    <div class="container">
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="/">✦ BlogSpace</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/create" class="btn-nav">+ Write a Post</a>
+      </div>
+    </div>
+  </nav>
 
-        <h1>{{ blog.title }}</h1>
+  <div class="article-page">
+    <div class="article-wrap">
 
-        <p class="author">
-            By {{ blog.author }}
-        </p>
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>{{ blog.title }}</span>
+      </div>
 
-        <hr>
-
-        <div class="content">
-            {{ blog.content }}
+      <div class="article-card">
+        <div class="article-top">
+          <div class="article-pill">✦ Blog Post</div>
+          <h1 class="article-title">{{ blog.title }}</h1>
+          <div class="article-meta">
+            <span class="meta-chip">📖 Post #{{ blog.id }}</span>
+            <span class="meta-chip">🕐 Just now</span>
+            <span class="meta-chip">✦ BlogSpace</span>
+          </div>
         </div>
 
-        <a href="/" class="btn">
-            Back to Dashboard
-        </a>
+        <div class="article-content">{{ blog.body }}</div>
+
+        <div class="article-actions">
+          <a href="/" class="btn btn-ghost">← All Posts</a>
+          <a href="/blog/{{ blog.id }}/edit" class="btn btn-teal">✏️ Edit Post</a>
+          <a href="/blog/{{ blog.id }}/delete" class="btn btn-danger">🗑 Delete</a>
+        </div>
+      </div>
 
     </div>
+  </div>
+
+  <footer>
+    <p>Built with ❤️ using <span>FastAPI</span> · © 2024 BlogSpace</p>
+  </footer>
 
 </body>
 </html>
