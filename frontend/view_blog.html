@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ blog.title }}</title>
+
+    <style>
+        body{
+            font-family:Segoe UI, sans-serif;
+            background:#f4f7fc;
+            margin:0;
+            padding:40px;
+        }
+
+        .container{
+            max-width:800px;
+            margin:auto;
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h1{
+            color:#1e293b;
+        }
+
+        .author{
+            color:#3b82f6;
+            margin-bottom:20px;
+        }
+
+        .content{
+            line-height:1.8;
+            color:#444;
+        }
+
+        .btn{
+            display:inline-block;
+            margin-top:20px;
+            padding:10px 20px;
+            background:#3b82f6;
+            color:white;
+            text-decoration:none;
+            border-radius:8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>{{ blog.title }}</h1>
+
+        <p class="author">
+            By {{ blog.author }}
+        </p>
+
+        <hr>
+
+        <div class="content">
+            {{ blog.content }}
+        </div>
+
+        <a href="/" class="btn">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Dashboard</title>
+</head>
+<body>
+
+    <h1>Blog Dashboard</h1>
+
+    <a href="/create">
+        Create Blog
+    </a>
+
+    <br><br>
+
+    <input type="text" placeholder="Search Blogs">
+
+    <hr>
+
+    {% for blog in blogs %}
+
+    <div class="card">
+
+        <h2>{{ blog.title }}</h2>
+
+        <p>
+            Author: {{ blog.author }}
+        </p>
+
+        <p>
+            {{ blog.content[:100] }}...
+        </p>
+
+        <a href="/blog/{{ blog.id }}">
+            View
+        </a>
+
+        &nbsp;
+
+        <a href="/edit/{{ blog.id }}">
+            Edit
+        </a>
+
+        &nbsp;
+
+        <a href="/delete/{{ blog.id }}">
+            Delete
+        </a>
+
+    </div>
+
+    <hr>
+
+    {% endfor %}
+
+</body>
+</html>
